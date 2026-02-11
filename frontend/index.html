@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel to SQL Server Import</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Excel Importer</h1>
+    <p>Upload `.xlsx` or `.xls` file to import records into SQL Server.</p>
+
+    <form id="upload-form">
+      <label for="excel-file">Excel file</label>
+      <input id="excel-file" name="file" type="file" accept=".xlsx,.xls" required />
+      <button id="submit-btn" type="submit">Upload and Import</button>
+    </form>
+
+    <section id="status-card" class="card hidden">
+      <h2>Import Summary</h2>
+      <pre id="summary"></pre>
+    </section>
+
+    <section id="errors-card" class="card hidden">
+      <h2>Validation Errors</h2>
+      <div class="table-wrap">
+        <table id="errors-table">
+          <thead>
+            <tr>
+              <th>Row</th>
+              <th>Column</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

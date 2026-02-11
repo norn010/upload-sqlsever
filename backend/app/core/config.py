@@ -1,0 +1,30 @@
+from functools import lru_cache
+from pathlib import Path
+from typing import List
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
+
+
+class Settings(BaseSettings):
+    app_name: str = "Excel to SQL Server Importer"
+    app_env: str = "local"
+    api_prefix: str = "/api"
+    sqlserver_connection_string: str = Field(
+        default=(
+            "mssql+pyodbc://sa:YourStrong!Passw0rd@localhost:1433/ExcelImportDB"
+            "?driver=ODBC+Driver+17+for+SQL+Server&TrustServerCertificate=yes"
+        )
+    )
+    max_upload_size_mb: int = 20
+    allowed_extensions: List[str] = [".xlsx", ".xls"]
+
+    model_config = SettingsConfigDict(env_file=str(ENV_FILE), env_file_encoding="utf-8")
+
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
