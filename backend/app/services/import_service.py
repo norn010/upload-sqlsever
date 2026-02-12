@@ -50,6 +50,31 @@ def save_validation_errors(
 
 def upsert_sales_records(db: Session, rows: list[dict[str, Any]]) -> int:
     imported = 0
+    updatable_fields = [
+        "name",
+        "amount",
+        "record_date",
+        "invoice_date",
+        "invoice_no",
+        "item_description",
+        "product_value",
+        "tax_value",
+        "total_value",
+        "vin_no",
+        "cancel_flag",
+        "cancel_product_value",
+        "cancel_tax_value",
+        "cancel_total_value",
+        "org_type_hq",
+        "org_type_branch_no",
+        "taxpayer_id",
+        "sale_price",
+        "com_fn",
+        "com_value",
+        "rule_applied",
+        "is_duplicate_tank",
+        "group_id",
+    ]
     for row in rows:
         existing = db.scalar(
             select(SalesRecord).where(SalesRecord.business_key == row["business_key"])
@@ -57,9 +82,8 @@ def upsert_sales_records(db: Session, rows: list[dict[str, Any]]) -> int:
         if existing is None:
             db.add(SalesRecord(**row))
         else:
-            existing.name = row["name"]
-            existing.amount = row["amount"]
-            existing.record_date = row["record_date"]
+            for field_name in updatable_fields:
+                setattr(existing, field_name, row.get(field_name))
         imported += 1
     db.commit()
     return imported

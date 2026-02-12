@@ -1,0 +1,6 @@
+backend
+python -m uvicorn app.main:app --app-dir backend --reload --port 8001
+frontend
+http://127.0.0.1:8001/
+kill
+$conn = Get-NetTCPConnection -LocalPort 8001 -State Listen -ErrorAction SilentlyContinue; if ($conn) { taskkill /PID $conn.OwningProcess /F | Out-Null; Write-Output ('KILLED_PID=' + $conn.OwningProcess) } else { Write-Output 'NO_BACKEND_RUNNING' }
